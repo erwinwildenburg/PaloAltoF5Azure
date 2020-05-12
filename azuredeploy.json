@@ -1,0 +1,790 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vNetNewOrExisting": {
+      "type": "string",
+      "defaultValue": "new",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "metadata": {
+        "description": "Specify whether to create a new or existing virtual network for the VM."
+      }
+    },
+    "hubVirtualNetworkName": {
+      "type": "string",
+      "defaultValue": "Vnet01-P-WE",
+      "metadata": {
+        "description": "Virtual Network for all resources."
+      }
+    },
+    "hubVirtualNetworkAddressPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Virtual Network Address Space"
+      },
+      "defaultValue": "10.200.0.0/19"
+    },
+    "hubGatewaySubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Gateway Subnet Address Space"
+      },
+      "defaultValue": "10.200.0.0/24"
+    },
+    "hubOutsideSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Outside Subnet Name"
+      },
+      "defaultValue": "AWZ-OUTSIDE"
+    },
+    "hubOutsideSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Outside Subnet Address Space"
+      },
+      "defaultValue": "10.200.16.0/24"
+    },
+    "hubDMZSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "DMZ Subnet Name"
+      },
+      "defaultValue": "AWZ-DMZ"
+    },
+    "hubDMZSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "DMZ Subnet Address Space"
+      },
+      "defaultValue": "10.200.17.0/24"
+    },
+    "hubLbfSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF Subnet Name"
+      },
+      "defaultValue": "AWZ-LBF"
+    },
+    "hubLbfSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF Subnet Address Space"
+      },
+      "defaultValue": "10.200.18.0/24"
+    },
+    "hubLbfDtaSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF-DTA Subnet Name"
+      },
+      "defaultValue": "AWZ-LBF-DTA"
+    },
+    "hubLbfDtaSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF-DTA Subnet Address Space"
+      },
+      "defaultValue": "10.200.20.0/24"
+    },
+    "hubLbbSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB Subnet Name"
+      },
+      "defaultValue": "AWZ-LBB"
+    },
+    "hubLbbSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB Subnet Address Space"
+      },
+      "defaultValue": "10.200.19.0/24"
+    },
+    "hubLbbDtaSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB-DTA Subnet Name"
+      },
+      "defaultValue": "AWZ-LBB-DTA"
+    },
+    "hubLbbDtaSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB-DTA Subnet Address Space"
+      },
+      "defaultValue": "10.200.21.0/24"
+    },
+    "hubMgmtSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-MGMT Subnet Name"
+      },
+      "defaultValue": "AWZ-MGT"
+    },
+    "hubMgmtSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-MGMT Subnet Address Space"
+      },
+      "defaultValue": "10.200.1.0/24"
+    },
+    "frontEndLoadBalancerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Name"
+      },
+      "defaultValue": "publicLoadBalancer"
+    },
+    "frontEndLoadBalancerIpName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Public IP Address Name"
+      },
+      "defaultValue": "publicIp1"
+    },
+    "backEndLoadBalancerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "internalLoadBalancer"
+    },
+    "paloAltoUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Admin Username for the Palo Alto's"
+      }
+    },
+    "PaloAltoPassword": {
+      "type": "secureString",
+      "metadata": {
+        "description": "Admin User Password for the Palo Alto's"
+      }
+    },
+    "f5Username": {
+      "type": "string",
+      "metadata": {
+        "description": "Admin Username for the F5's"
+      }
+    },
+    "f5Password": {
+      "type": "secureString",
+      "metadata": {
+        "description": "Admin User Password for the F5's"
+      }
+    },
+    "paAvailabilitySetName": {
+      "type": "string",
+      "defaultValue": "VMSeriesFwAvSet",
+      "metadata": {
+        "description": "Azure Availability Set for Palo Alto"
+      }
+    },
+    "f5AvailabilitySetName": {
+      "type": "string",
+      "defaultValue": "F5AvSet",
+      "metadata": {
+        "description": "Azure Availability Set for F5"
+      }
+    },
+    "paVirtualMachineSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS4_v2",
+      "allowedValues": [
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS3_v3",
+        "Standard_DS4_v3",
+        "Standard_DS16_v3"
+      ],
+      "metadata": {
+        "description": "VM Size for Palo Alto VM's"
+      }
+    },
+    "dmzRouteTableName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "dmz-udr"
+    },
+    "outsideRouteTableName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "outside-udr"
+    },
+    "gatewayRouteTableName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "gateway-udr"
+    },
+    "backEndLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the backend load balancer"
+      },
+      "defaultValue": "10.200.17.10"
+    },
+    "lbfLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the lbf load balancer"
+      },
+      "defaultValue": "10.200.18.10"
+    },
+    "lbfDtaLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the lbf dta load balancer"
+      },
+      "defaultValue": "10.200.20.10"
+    },
+    "paHostVirtualMachine1Name": {
+      "type": "string",
+      "defaultValue": "PFWCAZU01",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "paHostVirtualMachine2Name": {
+      "type": "string",
+      "defaultValue": "PFWCAZU02",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "paHostVirtualMachineFrontEndNSGName": {
+      "type": "string",
+      "defaultValue": "plb-nsg",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "paHostVirtualMachineMgmtNSGName": {
+      "type": "string",
+      "defaultValue": "pa-nsg",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "pa1IpName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Public IP Address Name"
+      },
+      "defaultValue": "paPublicIp1"
+    },
+    "pa2IpName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Public IP Address Name"
+      },
+      "defaultValue": "paPublicIp2"
+    },
+    "f5HostVirtualMachine1Name": {
+      "type": "string",
+      "defaultValue": "PLBCAZU01",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "f5HostVirtualMachine2Name": {
+      "type": "string",
+      "defaultValue": "PLBCAZU02",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "f5VirtualMachineSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS4_v2",
+      "allowedValues": [
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS11_v2",
+        "Standard_DS12_v2",
+        "Standard_DS13_v2",
+        "Standard_DS14_v2",
+        "Standard_DS15_v2"
+      ]
+    },
+    "f51IpName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Public IP Address Name"
+      },
+      "defaultValue": "f5PublicIp1"
+    },
+    "f52IpName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Public IP Address Name"
+      },
+      "defaultValue": "f5PublicIp2"
+    },
+    "f5HostVirtualMachineMgmtNSGName": {
+      "type": "string",
+      "defaultValue": "f5-nsg",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "f5Host1NetworkInterface0Ip": {
+      "type": "string",
+      "defaultValue": "10.200.1.130",
+      "metadata": {
+        "description": "The ip address of the management interface of the first F5."
+      }
+    },
+    "f5Host1NetworkInterface1Ip": {
+      "type": "string",
+      "defaultValue": "10.200.18.6",
+      "metadata": {
+        "description": "The ip address of the lbf interface of the first F5."
+      }
+    },
+    "f5Host1NetworkInterface2Ip": {
+      "type": "string",
+      "defaultValue": "10.200.19.6",
+      "metadata": {
+        "description": "The ip address of the lbb interface of the first F5."
+      }
+    },
+    "f5Host1NetworkInterface3Ip": {
+      "type": "string",
+      "defaultValue": "10.200.20.6",
+      "metadata": {
+        "description": "The ip address of the lbf dta interface of the first F5."
+      }
+    },
+    "f5Host1NetworkInterface4Ip": {
+      "type": "string",
+      "defaultValue": "10.200.21.6",
+      "metadata": {
+        "description": "The ip address of the lbb dta interface of the first F5."
+      }
+    },
+    "f5Host2NetworkInterface0Ip": {
+      "type": "string",
+      "defaultValue": "10.200.1.131",
+      "metadata": {
+        "description": "The ip address of the management interface of the second F5."
+      }
+    },
+    "f5Host2NetworkInterface1Ip": {
+      "type": "string",
+      "defaultValue": "10.200.18.7",
+      "metadata": {
+        "description": "The ip address of the lbf interface of the second F5."
+      }
+    },
+    "f5Host2NetworkInterface2Ip": {
+      "type": "string",
+      "defaultValue": "10.200.19.7",
+      "metadata": {
+        "description": "The ip address of the lbb interface of the second F5."
+      }
+    },
+    "f5Host2NetworkInterface3Ip": {
+      "type": "string",
+      "defaultValue": "10.200.20.7",
+      "metadata": {
+        "description": "The ip address of the lbf dta interface of the second F5."
+      }
+    },
+    "f5Host2NetworkInterface4Ip": {
+      "type": "string",
+      "defaultValue": "10.200.21.7",
+      "metadata": {
+        "description": "The ip address of the lbb dta interface of the second F5."
+      }
+    },
+    "paHost1NetworkInterface0Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the management interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.1.128"
+    },
+    "paHost1NetworkInterface1Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the outside interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.16.4"
+    },
+    "paHost1NetworkInterface2Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the dmz interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.17.4"
+    },
+    "paHost1NetworkInterface3Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the lbf interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.18.4"
+    },
+    "paHost1NetworkInterface4Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the lbf dta interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.20.4"
+    },
+    "paHost2NetworkInterface0Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the management interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.1.129"
+    },
+    "paHost2NetworkInterface1Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the outside interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.16.5"
+    },
+    "paHost2NetworkInterface2Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the dmz interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.17.5"
+    },
+    "paHost2NetworkInterface3Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the lbf interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.18.5"
+    },
+    "paHost2NetworkInterface4Ip": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip address of the lbf dta interface of the first Palo Alto."
+      },
+      "defaultValue": "10.200.20.5"
+    }
+  },
+  "variables": {
+    "baseUrl": "https://raw.githubusercontent.com/erwinwildenburg/PaloAltoF5Azure/master",
+    "infrastructureTemplateUrl": "[concat(variables('baseUrl'),'/infrastructure/azuredeploy.json')]",
+    "paloAltoTemplateUrl": "[concat(variables('baseUrl'), '/paloalto/azuredeploy.json')]",
+    "f5TemplateUrl": "[concat(variables('baseUrl'), '/f5/azuredeploy.json')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-05-01",
+      "name": "infrastructure",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('infrastructureTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vNetNewOrExisting": {
+            "value": "[parameters('vNetNewOrExisting')]"
+          },
+          "hubVirtualNetworkName": {
+            "value": "[parameters('hubVirtualNetworkName')]"
+          },
+          "hubVirtualNetworkAddressPrefix": {
+            "value": "[parameters('hubVirtualNetworkAddressPrefix')]"
+          },
+          "hubGatewaySubnetPrefix": {
+            "value": "[parameters('hubGatewaySubnetPrefix')]"
+          },
+          "hubOutsideSubnetName": {
+            "value": "[parameters('hubOutsideSubnetName')]"
+          },
+          "hubOutsideSubnetPrefix": {
+            "value": "[parameters('hubOutsideSubnetPrefix')]"
+          },
+          "hubDMZSubnetName": {
+            "value": "[parameters('hubDMZSubnetName')]"
+          },
+          "hubDMZSubnetPrefix": {
+            "value": "[parameters('hubDMZSubnetPrefix')]"
+          },
+          "hubLbfSubnetName": {
+            "value": "[parameters('hubLbfSubnetName')]"
+          },
+          "hubLbfSubnetPrefix": {
+            "value": "[parameters('hubLbfSubnetPrefix')]"
+          },
+          "hubLbfDtaSubnetName": {
+            "value": "[parameters('hubLbfDtaSubnetName')]"
+          },
+          "hubLbfDtaSubnetPrefix": {
+            "value": "[parameters('hubLbfDtaSubnetPrefix')]"
+          },
+          "hubLbbSubnetName": {
+            "value": "[parameters('hubLbbSubnetName')]"
+          },
+          "hubLbbSubnetPrefix": {
+            "value": "[parameters('hubLbbSubnetPrefix')]"
+          },
+          "hubLbbDtaSubnetName": {
+            "value": "[parameters('hubLbbDtaSubnetName')]"
+          },
+          "hubLbbDtaSubnetPrefix": {
+            "value": "[parameters('hubLbbDtaSubnetPrefix')]"
+          },
+          "hubMgmtSubnetName": {
+            "value": "[parameters('hubMgmtSubnetName')]"
+          },
+          "hubMgmtSubnetPrefix": {
+            "value": "[parameters('hubMgmtSubnetPrefix')]"
+          },
+          "frontEndLoadBalancerName": {
+            "value": "[parameters('frontEndLoadBalancerName')]"
+          },
+          "frontEndLoadBalancerIpName": {
+            "value": "[parameters('frontEndLoadBalancerIpName')]"
+          },
+          "backEndLoadBalancerName": {
+            "value": "[parameters('backEndLoadBalancerName')]"
+          },
+          "dmzRouteTableName": {
+            "value": "[parameters('dmzRouteTableName')]"
+          },
+          "outsideRouteTableName": {
+            "value": "[parameters('outsideRouteTableName')]"
+          },
+          "gatewayRouteTableName": {
+            "value": "[parameters('gatewayRouteTableName')]"
+          },
+          "backEndLoadBalancerIp": {
+            "value": "[parameters('backEndLoadBalancerIp')]"
+          },
+          "lbfLoadBalancerIp": {
+            "value": "[parameters('lbfLoadBalancerIp')]"
+          },
+          "lbfDtaLoadBalancerIp": {
+            "value": "[parameters('lbfDtaLoadBalancerIp')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-05-01",
+      "name": "paloAlto",
+      "dependsOn": [
+        "infrastructure"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('paloAltoTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "availabilitySetName": {
+            "value": "[parameters('paAvailabilitySetName')]"
+          },
+          "virtualNetworkName": {
+            "value": "[parameters('hubVirtualNetworkName')]"
+          },
+          "outsideSubnetName": {
+            "value": "[parameters('hubOutsideSubnetName')]"
+          },
+          "DMZSubnetName": {
+            "value": "[parameters('hubDMZSubnetName')]"
+          },
+          "lbfSubnetName": {
+            "value": "[parameters('hubLbfSubnetName')]"
+          },
+          "lbfDtaSubnetName": {
+            "value": "[parameters('hubLbfDtaSubnetName')]"
+          },
+          "HostVirtualMachine1Name": {
+            "value": "[parameters('paHostVirtualMachine1Name')]"
+          },
+          "HostVirtualMachine2Name": {
+            "value": "[parameters('paHostVirtualMachine2Name')]"
+          },
+          "HostVirtualMachineFrontEndNSGName": {
+            "value": "[parameters('paHostVirtualMachineFrontEndNSGName')]"
+          },
+          "HostVirtualMachineMgmtNSGName": {
+            "value": "[parameters('paHostVirtualMachineMgmtNSGName')]"
+          },
+          "HostVirtualMachineSize": {
+            "value": "[parameters('paVirtualMachineSize')]"
+          },
+          "HostAdminUsername": {
+            "value": "[parameters('PaloAltoUsername')]"
+          },
+          "HostAdminPassword": {
+            "value": "[parameters('PaloAltoPassword')]"
+          },
+          "frontEndLoadBalancerName": {
+            "value": "[parameters('frontEndLoadBalancerName')]"
+          },
+          "backEndLoadBalancerName": {
+            "value": "[parameters('backEndLoadBalancerName')]"
+          },
+          "mgmtSubnetName": {
+            "value": "[parameters('hubMgmtSubnetName')]"
+          },
+          "pa1IpName": {
+            "value": "[parameters('pa1IpName')]"
+          },
+          "pa2IpName": {
+            "value": "[parameters('pa2IpName')]"
+          },
+          "Host1NetworkInterface0Ip": {
+            "value": "[parameters('paHost1NetworkInterface0Ip')]"
+          },
+          "Host1NetworkInterface1Ip": {
+            "value": "[parameters('paHost1NetworkInterface1Ip')]"
+          },
+          "Host1NetworkInterface2Ip": {
+            "value": "[parameters('paHost1NetworkInterface2Ip')]"
+          },
+          "Host1NetworkInterface3Ip": {
+            "value": "[parameters('paHost1NetworkInterface3Ip')]"
+          },
+          "Host1NetworkInterface4Ip": {
+            "value": "[parameters('paHost1NetworkInterface4Ip')]"
+          },
+          "Host2NetworkInterface0Ip": {
+            "value": "[parameters('paHost2NetworkInterface0Ip')]"
+          },
+          "Host2NetworkInterface1Ip": {
+            "value": "[parameters('paHost2NetworkInterface1Ip')]"
+          },
+          "Host2NetworkInterface2Ip": {
+            "value": "[parameters('paHost2NetworkInterface2Ip')]"
+          },
+          "Host2NetworkInterface3Ip": {
+            "value": "[parameters('paHost2NetworkInterface3Ip')]"
+          },
+          "Host2NetworkInterface4Ip": {
+            "value": "[parameters('paHost2NetworkInterface4Ip')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-05-01",
+      "name": "f5",
+      "dependsOn": [
+        "infrastructure",
+        "paloalto"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('f5TemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "virtualNetworkName": {
+            "value": "[parameters('hubVirtualNetworkName')]"
+          },
+          "availabilitySetName": {
+            "value": "[parameters('f5AvailabilitySetName')]"
+          },
+          "mgmtSubnetName": {
+            "value": "[parameters('hubMgmtSubnetName')]"
+          },
+          "lbfSubnetName": {
+            "value": "[parameters('hubLbfSubnetName')]"
+          },
+          "lbfDtaSubnetName": {
+            "value": "[parameters('hubLbfDtaSubnetName')]"
+          },
+          "lbbSubnetName": {
+            "value": "[parameters('hubLbbSubnetName')]"
+          },
+          "lbbDtaSubnetName": {
+            "value": "[parameters('hubLbbDtaSubnetName')]"
+          },
+          "LoadBalancerName": {
+            "value": "[parameters('backEndLoadBalancerName')]"
+          },
+          "HostVirtualMachine1Name": {
+            "value": "[parameters('f5HostVirtualMachine1Name')]"
+          },
+          "HostVirtualMachine2Name": {
+            "value": "[parameters('f5HostVirtualMachine2Name')]"
+          },
+          "HostAdminUsername": {
+            "value": "[parameters('F5Username')]"
+          },
+          "HostAdminPassword": {
+            "value": "[parameters('F5Password')]"
+          },
+          "HostVirtualMachineSize": {
+            "value": "[parameters('f5VirtualMachineSize')]"
+          },
+          "f51IpName": {
+            "value": "[parameters('f51IpName')]"
+          },
+          "f52IpName": {
+            "value": "[parameters('f52IpName')]"
+          },
+          "HostVirtualMachineMgmtNSGName": {
+            "value": "[parameters('f5HostVirtualMachineMgmtNSGName')]"
+          },
+          "Host1NetworkInterface0Ip": {
+            "value": "[parameters('f5Host1NetworkInterface0Ip')]"
+          },
+          "Host1NetworkInterface1Ip": {
+            "value": "[parameters('f5Host1NetworkInterface1Ip')]"
+          },
+          "Host1NetworkInterface2Ip": {
+            "value": "[parameters('f5Host1NetworkInterface2Ip')]"
+          },
+          "Host1NetworkInterface3Ip": {
+            "value": "[parameters('f5Host1NetworkInterface3Ip')]"
+          },
+          "Host1NetworkInterface4Ip": {
+            "value": "[parameters('f5Host1NetworkInterface4Ip')]"
+          },
+          "Host2NetworkInterface0Ip": {
+            "value": "[parameters('f5Host2NetworkInterface0Ip')]"
+          },
+          "Host2NetworkInterface1Ip": {
+            "value": "[parameters('f5Host2NetworkInterface1Ip')]"
+          },
+          "Host2NetworkInterface2Ip": {
+            "value": "[parameters('f5Host2NetworkInterface2Ip')]"
+          },
+          "Host2NetworkInterface3Ip": {
+            "value": "[parameters('f5Host2NetworkInterface3Ip')]"
+          },
+          "Host2NetworkInterface4Ip": {
+            "value": "[parameters('f5Host2NetworkInterface4Ip')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+  }
+}

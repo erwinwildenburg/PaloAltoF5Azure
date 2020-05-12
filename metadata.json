@@ -1,0 +1,9 @@
+{
+  "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
+  "type": "QuickStart",
+  "itemDisplayName": "Palo Alto and F5",
+  "description": "A template to  create a basic network environment with Palo Alto and F5.",
+  "summary": "Creates an Azure network with Palo Alto and F5.",
+  "githubUsername": "erwinwildenburg",
+  "dateUpdated": "2020-04-28"
+}

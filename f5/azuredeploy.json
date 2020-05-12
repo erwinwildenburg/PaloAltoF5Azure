@@ -1,0 +1,723 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "Vnet01-P-WE",
+      "metadata": {
+        "description": "Hyper-V Host and Guest VMs Virtual Network"
+      }
+    },
+    "availabilitySetName": {
+      "type": "string",
+      "defaultValue": "F5AvSet",
+      "metadata": {
+        "description": "Azure Availability Set for F5"
+      }
+    },
+    "mgmtSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-MGT Subnet Name"
+      },
+      "defaultValue": "AWZ-MGT"
+    },
+    "lbfSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF Subnet Name"
+      },
+      "defaultValue": "AWZ-LBF"
+    },
+    "lbfDtaSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF-DTA Subnet Name"
+      },
+      "defaultValue": "AWZ-LBF-DTA"
+    },
+    "lbbSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB Subnet Name"
+      },
+      "defaultValue": "AWZ-LBB"
+    },
+    "lbbDtaSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB-DTA Subnet Name"
+      },
+      "defaultValue": "AWZ-LBB-DTA"
+    },
+    "LoadBalancerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "internalLoadBalancer"
+    },
+    "HostVirtualMachine1Name": {
+      "type": "string",
+      "defaultValue": "PLBCAZU01",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "HostVirtualMachine2Name": {
+      "type": "string",
+      "defaultValue": "PLBCAZU02",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "HostAdminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Admin Username for the Host Virtual Machine"
+      }
+    },
+    "HostAdminPassword": {
+      "type": "secureString",
+      "metadata": {
+        "description": "Admin User Password for the Host Virtual Machine"
+      }
+    },
+    "HostVirtualMachineSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS4_v2",
+      "allowedValues": [
+        "Standard_DS2",
+        "Standard_DS3",
+        "Standard_DS4",
+        "Standard_DS11",
+        "Standard_DS12",
+        "Standard_DS13",
+        "Standard_DS14",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
+        "Standard_DS5_v2",
+        "Standard_DS11_v2",
+        "Standard_DS12_v2",
+        "Standard_DS13_v2",
+        "Standard_DS14_v2",
+        "Standard_DS15_v2",
+        "Standard_F2S",
+        "Standard_F4S",
+        "Standard_F8S",
+        "Standard_F16S",
+        "Standard_GS2",
+        "Standard_GS3",
+        "Standard_GS4",
+        "Standard_GS5"
+      ]
+    },
+    "f51IpName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Public IP Address Name"
+      },
+      "defaultValue": "f5PublicIp1"
+    },
+    "f52IpName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Public IP Address Name"
+      },
+      "defaultValue": "f5PublicIp2"
+    },
+    "HostVirtualMachineMgmtNSGName": {
+      "type": "string",
+      "defaultValue": "f5-nsg",
+      "maxLength": 15,
+      "metadata": {
+        "description": "Name of Hyper-V Host Virtual Machine, Maximum of 15 characters, use letters and numbers only."
+      }
+    },
+    "Host1NetworkInterface0Ip": {
+      "type": "string",
+      "defaultValue": "10.200.1.130",
+      "metadata": {
+        "description": "The ip address of the management interface of the first F5."
+      }
+    },
+    "Host1NetworkInterface1Ip": {
+      "type": "string",
+      "defaultValue": "10.200.18.6",
+      "metadata": {
+        "description": "The ip address of the lbf interface of the first F5."
+      }
+    },
+    "Host1NetworkInterface2Ip": {
+      "type": "string",
+      "defaultValue": "10.200.19.6",
+      "metadata": {
+        "description": "The ip address of the lbb interface of the first F5."
+      }
+    },
+    "Host1NetworkInterface3Ip": {
+      "type": "string",
+      "defaultValue": "10.200.20.6",
+      "metadata": {
+        "description": "The ip address of the lbf dta interface of the first F5."
+      }
+    },
+    "Host1NetworkInterface4Ip": {
+      "type": "string",
+      "defaultValue": "10.200.21.6",
+      "metadata": {
+        "description": "The ip address of the lbb dta interface of the first F5."
+      }
+    },
+    "Host2NetworkInterface0Ip": {
+      "type": "string",
+      "defaultValue": "10.200.1.131",
+      "metadata": {
+        "description": "The ip address of the management interface of the second F5."
+      }
+    },
+    "Host2NetworkInterface1Ip": {
+      "type": "string",
+      "defaultValue": "10.200.18.7",
+      "metadata": {
+        "description": "The ip address of the lbf interface of the second F5."
+      }
+    },
+    "Host2NetworkInterface2Ip": {
+      "type": "string",
+      "defaultValue": "10.200.19.7",
+      "metadata": {
+        "description": "The ip address of the lbb interface of the second F5."
+      }
+    },
+    "Host2NetworkInterface3Ip": {
+      "type": "string",
+      "defaultValue": "10.200.20.7",
+      "metadata": {
+        "description": "The ip address of the lbf dta interface of the second F5."
+      }
+    },
+    "Host2NetworkInterface4Ip": {
+      "type": "string",
+      "defaultValue": "10.200.21.7",
+      "metadata": {
+        "description": "The ip address of the lbb dta interface of the second F5."
+      }
+    }
+  },
+  "variables": {
+    "Host1NetworkInterface0Name": "[concat(parameters('HostVirtualMachine1Name'), '-eth0')]",
+    "Host1NetworkInterface1Name": "[concat(parameters('HostVirtualMachine1Name'), '-eth1')]",
+    "Host1NetworkInterface2Name": "[concat(parameters('HostVirtualMachine1Name'), '-eth2')]",
+    "Host1NetworkInterface3Name": "[concat(parameters('HostVirtualMachine1Name'), '-eth3')]",
+    "Host1NetworkInterface4Name": "[concat(parameters('HostVirtualMachine1Name'), '-eth4')]",
+    "Host2NetworkInterface0Name": "[concat(parameters('HostVirtualMachine2Name'), '-eth0')]",
+    "Host2NetworkInterface1Name": "[concat(parameters('HostVirtualMachine2Name'), '-eth1')]",
+    "Host2NetworkInterface2Name": "[concat(parameters('HostVirtualMachine2Name'), '-eth2')]",
+    "Host2NetworkInterface3Name": "[concat(parameters('HostVirtualMachine2Name'), '-eth3')]",
+    "Host2NetworkInterface4Name": "[concat(parameters('HostVirtualMachine2Name'), '-eth4')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('availabilitySetName')]",
+      "apiVersion": "2017-12-01",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Aligned"
+      },
+      "properties": {
+        "platformFaultDomainCount": 2,
+        "platformUpdateDomainCount": 2
+      }
+    },
+    {
+      "apiVersion": "2019-04-01",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[parameters('f51IpName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "apiVersion": "2019-04-01",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[parameters('f52IpName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('HostVirtualMachineMgmtNSGName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "HTTPS",
+            "properties": {
+              "description": "Allows Telindus access to HTTPS interface.",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "178.85.118.56/32",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "SSH",
+            "properties": {
+              "description": "Allows Telindus access to SSH interface.",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "178.85.118.56/32",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 110,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host1NetworkInterface0Name')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('f51IpName'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('HostVirtualMachineMgmtNSGName'))]"
+      ],
+      "properties": {
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('HostVirtualMachineMgmtNSGName'))]"
+        },
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": true,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host1NetworkInterface0Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('mgmtSubnetName'))]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('f51IpName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host2NetworkInterface0Name')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('f52IpName'))]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('HostVirtualMachineMgmtNSGName'))]"
+      ],
+      "properties": {
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('HostVirtualMachineMgmtNSGName'))]"
+        },
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": true,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host2NetworkInterface0Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('mgmtSubnetName'))]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('f52IpName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host1NetworkInterface1Name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": false,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host1NetworkInterface1Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('LoadBalancerName')), '/backendAddressPools/', 'f5LbfBackendPool')]"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host2NetworkInterface1Name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": false,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host2NetworkInterface1Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('LoadBalancerName')), '/backendAddressPools/', 'f5LbfBackendPool')]"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host1NetworkInterface2Name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": false,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host1NetworkInterface2Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host2NetworkInterface2Name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": false,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host2NetworkInterface2Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host1NetworkInterface3Name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": false,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host1NetworkInterface3Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('LoadBalancerName')), '/backendAddressPools/', 'f5LbfDtaBackendPool')]"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host2NetworkInterface3Name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": false,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host2NetworkInterface3Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
+              },
+              "loadBalancerBackendAddressPools": [
+                {
+                  "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('LoadBalancerName')), '/backendAddressPools/', 'f5LbfDtaBackendPool')]"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host1NetworkInterface4Name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": false,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host1NetworkInterface4Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2019-04-01",
+      "name": "[variables('Host2NetworkInterface4Name')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "enableIPForwarding": true,
+        "ipConfigurations": [
+          {
+            "name": "ipconfig",
+            "properties": {
+              "primary": false,
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('Host2NetworkInterface4Ip')]",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2019-03-01",
+      "location": "[parameters('location')]",
+      "name": "[parameters('HostVirtualMachine1Name')]",
+      "plan": {
+        "name": "f5-big-all-2slot-byol",
+        "product": "f5-big-ip-byol",
+        "publisher": "f5-networks"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface0Name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface1Name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface2Name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface3Name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface4Name'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('HostVirtualMachineSize')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "f5-networks",
+            "offer": "f5-big-ip-byol",
+            "Sku": "f5-big-all-2slot-byol",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "fromImage"
+          }
+        },
+        "osProfile": {
+          "computerName": "[parameters('HostVirtualMachine1Name')]",
+          "adminUsername": "[parameters('HostAdminUsername')]",
+          "adminPassword": "[parameters('HostAdminPassword')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface0Name'))]",
+              "properties": {
+                "primary": true
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface1Name'))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface2Name'))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface3Name'))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host1NetworkInterface4Name'))]",
+              "properties": {
+                "primary": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2019-03-01",
+      "location": "[parameters('location')]",
+      "name": "[parameters('HostVirtualMachine2Name')]",
+      "plan": {
+        "name": "f5-big-all-2slot-byol",
+        "product": "f5-big-ip-byol",
+        "publisher": "f5-networks"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface0Name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface1Name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface2Name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface3Name'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface4Name'))]",
+        "[resourceId('Microsoft.Compute/virtualMachines', parameters('HostVirtualMachine1Name'))]"
+      ],
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySetName'))]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('HostVirtualMachineSize')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "f5-networks",
+            "offer": "f5-big-ip-byol",
+            "Sku": "f5-big-all-2slot-byol",
+            "version": "latest"
+          },
+          "osDisk": {
+            "createOption": "fromImage"
+          }
+        },
+        "osProfile": {
+          "computerName": "[parameters('HostVirtualMachine2Name')]",
+          "adminUsername": "[parameters('HostAdminUsername')]",
+          "adminPassword": "[parameters('HostAdminPassword')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface0Name'))]",
+              "properties": {
+                "primary": true
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface1Name'))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface2Name'))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface3Name'))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('Host2NetworkInterface4Name'))]",
+              "properties": {
+                "primary": false
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {
+  }
+}

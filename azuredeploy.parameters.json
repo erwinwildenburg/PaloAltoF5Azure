@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "PaloAltoUsername": {
+      "value": "your-username"
+    },
+    "PaloAltoPassword": {
+      "value": "your-password"
+    },
+    "F5Username": {
+      "value": "your-username"
+    },
+    "F5Password": {
+      "value": "your-password"
+    }
+  }
+}

@@ -1,0 +1,557 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vNetNewOrExisting": {
+      "type": "string",
+      "defaultValue": "new",
+      "allowedValues": [
+        "new",
+        "existing"
+      ],
+      "metadata": {
+        "description": "Specify whether to create a new or existing virtual network for the VM."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "hubVirtualNetworkName": {
+      "type": "string",
+      "defaultValue": "Vnet01-P-WE",
+      "metadata": {
+        "description": "Hyper-V Host and Guest VMs Virtual Network"
+      }
+    },
+    "hubVirtualNetworkAddressPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Virtual Network Address Space"
+      },
+      "defaultValue": "10.200.0.0/19"
+    },
+    "hubGatewaySubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Gateway Subnet Address Space"
+      },
+      "defaultValue": "10.200.0.0/24"
+    },
+    "hubOutsideSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Outside Subnet Name"
+      },
+      "defaultValue": "AWZ-OUTSIDE"
+    },
+    "hubOutsideSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Outside Subnet Address Space"
+      },
+      "defaultValue": "10.200.16.0/24"
+    },
+    "hubDMZSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "DMZ Subnet Name"
+      },
+      "defaultValue": "AWZ-DMZ"
+    },
+    "hubDMZSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "DMZ Subnet Address Space"
+      },
+      "defaultValue": "10.200.17.0/24"
+    },
+    "hubLbfSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF Subnet Name"
+      },
+      "defaultValue": "AWZ-LBF"
+    },
+    "hubLbfSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF Subnet Address Space"
+      },
+      "defaultValue": "10.200.18.0/24"
+    },
+    "hubLbfDtaSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF-DTA Subnet Name"
+      },
+      "defaultValue": "AWZ-LBF-DTA"
+    },
+    "hubLbfDtaSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBF-DTA Subnet Address Space"
+      },
+      "defaultValue": "10.200.20.0/24"
+    },
+    "hubLbbSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB Subnet Name"
+      },
+      "defaultValue": "AWZ-LBB"
+    },
+    "hubLbbSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB Subnet Address Space"
+      },
+      "defaultValue": "10.200.19.0/24"
+    },
+    "hubLbbDtaSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB-DTA Subnet Name"
+      },
+      "defaultValue": "AWZ-LBB-DTA"
+    },
+    "hubLbbDtaSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-LBB-DTA Subnet Address Space"
+      },
+      "defaultValue": "10.200.21.0/24"
+    },
+    "hubMgmtSubnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-MGMT Subnet Name"
+      },
+      "defaultValue": "AWZ-MGT"
+    },
+    "hubMgmtSubnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "AWZ-MGMT Subnet Address Space"
+      },
+      "defaultValue": "10.200.1.0/24"
+    },
+    "frontEndLoadBalancerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Name"
+      },
+      "defaultValue": "publicLoadBalancer"
+    },
+    "frontEndLoadBalancerIpName": {
+      "type": "string",
+      "metadata": {
+        "description": "Frontend Application Gateway Public IP Address Name"
+      },
+      "defaultValue": "publicIp1"
+    },
+    "backEndLoadBalancerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "internalLoadBalancer"
+    },
+    "dmzRouteTableName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "dmz-udr"
+    },
+    "outsideRouteTableName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "outside-udr"
+    },
+    "gatewayRouteTableName": {
+      "type": "string",
+      "metadata": {
+        "description": "Backend Application Gateway Name"
+      },
+      "defaultValue": "gateway-udr"
+    },
+    "backEndLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the backend load balancer"
+      },
+      "defaultValue": "10.200.17.10"
+    },
+    "lbfLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the lbf load balancer"
+      },
+      "defaultValue": "10.200.18.10"
+    },
+    "lbfDtaLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the lbf dta load balancer"
+      },
+      "defaultValue": "10.200.20.10"
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2019-11-01",
+      "name": "[parameters('dmzRouteTableName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "routes": [
+          {
+            "name": "Blackhole-Management",
+            "properties": {
+              "addressPrefix": "[parameters('hubMgmtSubnetPrefix')]",
+              "nextHopType": "None"
+            }
+          },
+          {
+            "name": "Blackhole-Public",
+            "properties": {
+              "addressPrefix": "[parameters('hubOutsideSubnetPrefix')]",
+              "nextHopType": "None"
+            }
+          },
+          {
+            "name": "AZW-LBF",
+            "properties": {
+              "addressPrefix": "[parameters('hubLbfSubnetPrefix')]",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "[parameters('lbfLoadBalancerIp')]"
+            }
+          },
+          {
+            "name": "AZW-LBF-DTA",
+            "properties": {
+              "addressPrefix": "[parameters('hubLbfDtaSubnetPrefix')]",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "[parameters('lbfDtaLoadBalancerIp')]"
+            }
+          },
+          {
+            "name": "UDR-default",
+            "properties": {
+              "addressPrefix": "0.0.0.0/0",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "[parameters('backEndLoadBalancerIp')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2019-11-01",
+      "name": "[parameters('outsideRouteTableName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "routes": [
+          {
+            "name": "Blackhole-Management",
+            "properties": {
+              "addressPrefix": "[parameters('hubMgmtSubnetPrefix')]",
+              "nextHopType": "None"
+            }
+          },
+          {
+            "name": "Blackhole-Private",
+            "properties": {
+              "addressPrefix": "[parameters('hubDMZSubnetPrefix')]",
+              "nextHopType": "None"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/routeTables",
+      "apiVersion": "2019-11-01",
+      "name": "[parameters('gatewayRouteTableName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "routes": [
+          {
+            "name": "Blackhole-Public",
+            "properties": {
+              "addressPrefix": "[parameters('hubOutsideSubnetPrefix')]",
+              "nextHopType": "None"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-04-01",
+      "name": "[parameters('hubVirtualNetworkName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/routeTables', parameters('dmzRouteTableName'))]",
+        "[resourceId('Microsoft.Network/routeTables', parameters('outsideRouteTableName'))]",
+        "[resourceId('Microsoft.Network/routeTables', parameters('gatewayRouteTableName'))]"
+      ],
+      "condition": "[equals(parameters('vNetNewOrExisting'), 'new')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('hubVirtualNetworkAddressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('hubOutsideSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('hubOutsideSubnetPrefix')]",
+              "routeTable": {
+                "id": "[resourceId('Microsoft.Network/routeTables', parameters('outsideRouteTableName'))]"
+              }
+            }
+          },
+          {
+            "name": "[parameters('hubDMZSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('hubDMZSubnetPrefix')]",
+              "routeTable": {
+                "id": "[resourceId('Microsoft.Network/routeTables', parameters('dmzRouteTableName'))]"
+              }
+            }
+          },
+          {
+            "name": "[parameters('hubLbfSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('hubLbfSubnetPrefix')]"
+            }
+          },
+          {
+            "name": "[parameters('hubLbfDtaSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('hubLbfDtaSubnetPrefix')]"
+            }
+          },
+          {
+            "name": "[parameters('hubLbbSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('hubLbbSubnetPrefix')]"
+            }
+          },
+          {
+            "name": "[parameters('hubLbbDtaSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('hubLbbDtaSubnetPrefix')]"
+            }
+          },
+          {
+            "name": "[parameters('hubMgmtSubnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('hubMgmtSubnetPrefix')]"
+            }
+          },
+          {
+            "name": "GatewaySubnet",
+            "properties": {
+              "addressPrefix": "[parameters('hubGatewaySubnetPrefix')]",
+              "routeTable": {
+                "id": "[resourceId('Microsoft.Network/routeTables', parameters('gatewayRouteTableName'))]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2019-04-01",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[parameters('frontEndLoadBalancerIpName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+     "type": "Microsoft.Network/loadBalancers",
+     "apiVersion": "2018-12-01",
+     "name": "[parameters('frontEndLoadBalancerName')]",
+     "location": "[parameters('location')]",
+     "sku": {
+       "name": "Standard"
+     },
+     "dependsOn": [
+       "[resourceId('Microsoft.Network/publicIPAddresses', parameters('frontEndLoadBalancerIpName'))]"
+     ],
+     "properties": {
+       "frontendIPConfigurations": [
+         {
+           "name": "LoadBalancerFrontEnd",
+           "properties": {
+             "publicIPAddress": {
+               "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('frontEndLoadBalancerIpName'))]"
+             }
+           }
+         }
+       ],
+       "backendAddressPools": [
+         {
+           "name": "LoadBalancerBackEndPool"
+         }
+       ],
+       "loadBalancingRules": [
+       ],
+       "probes": [
+         {
+           "name": "loadBalancerHealthProbe",
+           "properties": {
+             "protocol": "Tcp",
+             "port": 22,
+             "intervalInSeconds": 5,
+             "numberOfProbes": 2
+           }
+         }
+       ]
+     }
+   },
+   {
+      "apiVersion": "2018-04-01",
+      "type": "Microsoft.Network/loadBalancers",
+      "name": "[parameters('backEndLoadBalancerName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard"
+      },
+      "dependsOn": [
+        "[parameters('hubVirtualNetworkName')]"
+      ],
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubDMZSubnetName'))]"
+              },
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('backEndLoadBalancerIp')]"
+            },
+            "name": "LoadBalancerFrontend"
+          },
+          {
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbfSubnetName'))]"
+              },
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('lbfLoadBalancerIp')]"
+            },
+            "name": "lbfLoadBalancerFrontend"
+          },
+          {
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbfDtaSubnetName'))]"
+              },
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('lbfDtaLoadBalancerIp')]"
+            },
+            "name": "lbfDtaLoadBalancerFrontend"
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "paBackendPool"
+          },
+          {
+            "name": "f5LbfBackendPool"
+          },
+          {
+            "name": "f5LbfDtaBackendPool"
+          }
+        ],
+        "loadBalancingRules": [
+          {
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/backendAddressPools/paBackendPool')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/probes/lbprobe')]"
+              },
+              "protocol": "All",
+              "frontendPort": 0,
+              "backendPort": 0,
+              "idleTimeoutInMinutes": 15
+            },
+            "Name": "lbrule"
+          },
+          {
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/frontendIpConfigurations/lbfLoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/backendAddressPools/f5LbfBackendPool')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/probes/lbprobe')]"
+              },
+              "protocol": "All",
+              "frontendPort": 0,
+              "backendPort": 0,
+              "idleTimeoutInMinutes": 15
+            },
+            "Name": "lbfLbrule"
+          },
+          {
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/frontendIpConfigurations/lbfDtaLoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/backendAddressPools/f5LbfDtaBackendPool')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/probes/lbprobe')]"
+              },
+              "protocol": "All",
+              "frontendPort": 0,
+              "backendPort": 0,
+              "idleTimeoutInMinutes": 15
+            },
+            "Name": "lbfDtaLbrule"
+          }
+        ],
+        "probes": [
+          {
+            "properties": {
+              "protocol": "Tcp",
+              "port": 443,
+              "intervalInSeconds": 15,
+              "numberOfProbes": 2
+            },
+            "name": "lbprobe"
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+  }
+}
