@@ -199,7 +199,7 @@
     },
     "paVirtualMachineSize": {
       "type": "string",
-      "defaultValue": "Standard_DS4_v2",
+      "defaultValue": "Standard_DS5_v2",
       "allowedValues": [
         "Standard_DS4_v2",
         "Standard_DS5_v2",
