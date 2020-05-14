@@ -153,6 +153,12 @@
       },
       "defaultValue": "internalLoadBalancer"
     },
+    "externalAccessIps": {
+      "type": "string",
+      "metadata": {
+        "description": "Comma seperated list of external IP's that are allowed to access the management ports."
+      }
+    },
     "paloAltoUsername": {
       "type": "string",
       "metadata": {
@@ -684,6 +690,9 @@
           },
           "Host2NetworkInterface4Ip": {
             "value": "[parameters('paHost2NetworkInterface4Ip')]"
+          },
+          "externalAccessIps": {
+            "value": "[parameters('externalAccessIps')]"
           }
         }
       }
@@ -780,6 +789,9 @@
           },
           "Host2NetworkInterface4Ip": {
             "value": "[parameters('f5Host2NetworkInterface4Ip')]"
+          },
+          "externalAccessIps": {
+            "value": "[parameters('externalAccessIps')]"
           }
         }
       }

@@ -9,6 +9,12 @@
         "description": "Location for all resources."
       }
     },
+    "externalAccessIps": {
+      "type": "string",
+      "metadata": {
+        "description": "Comma seperated list of external IP's that are allowed to access the management ports."
+      }
+    },
     "availabilitySetName": {
       "type": "string",
       "defaultValue": "VMSeriesFwAvSet",
@@ -286,7 +292,7 @@
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "443",
-              "sourceAddressPrefix": "178.85.118.56/32",
+              "sourceAddressPrefix": "[parameters('externalAccessIps')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
               "priority": 100,
@@ -300,7 +306,7 @@
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "22",
-              "sourceAddressPrefix": "178.85.118.56/32",
+              "sourceAddressPrefix": "[parameters('externalAccessIps')]",
               "destinationAddressPrefix": "*",
               "access": "Allow",
               "priority": 110,

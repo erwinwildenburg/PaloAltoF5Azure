@@ -3,16 +3,19 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "PaloAltoUsername": {
-      "value": "your-username"
+      "value": ""
     },
     "PaloAltoPassword": {
-      "value": "your-password"
+      "value": ""
     },
     "F5Username": {
-      "value": "your-username"
+      "value": ""
     },
     "F5Password": {
-      "value": "your-password"
+      "value": ""
+    },
+    "externalAccessIps": {
+      "value": ""
     }
   }
 }
