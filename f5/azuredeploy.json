@@ -439,7 +439,7 @@
           {
             "name": "ipconfig",
             "properties": {
-              "primary": false,
+              "primary": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface1Ip')]",
               "subnet": {
@@ -477,7 +477,7 @@
           {
             "name": "ipconfig",
             "properties": {
-              "primary": false,
+              "primary": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface1Ip')]",
               "subnet": {
@@ -515,7 +515,7 @@
           {
             "name": "ipconfig",
             "properties": {
-              "primary": false,
+              "primary": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface2Ip')]",
               "subnet": {
@@ -553,7 +553,7 @@
           {
             "name": "ipconfig",
             "properties": {
-              "primary": false,
+              "primary": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface2Ip')]",
               "subnet": {
@@ -591,7 +591,7 @@
           {
             "name": "ipconfig",
             "properties": {
-              "primary": false,
+              "primary": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface3Ip')]",
               "subnet": {
@@ -629,7 +629,7 @@
           {
             "name": "ipconfig",
             "properties": {
-              "primary": false,
+              "primary": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface3Ip')]",
               "subnet": {
@@ -667,7 +667,7 @@
           {
             "name": "ipconfig",
             "properties": {
-              "primary": false,
+              "primary": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface4Ip')]",
               "subnet": {
@@ -705,7 +705,7 @@
           {
             "name": "ipconfig",
             "properties": {
-              "primary": false,
+              "primary": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface4Ip')]",
               "subnet": {
