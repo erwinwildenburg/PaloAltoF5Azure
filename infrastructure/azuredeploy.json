@@ -201,6 +201,20 @@
         "description": "The ip of the lbf dta load balancer"
       },
       "defaultValue": "10.200.20.10"
+    },
+    "lbbLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the lbf load balancer"
+      },
+      "defaultValue": "10.200.19.10"
+    },
+    "lbbDtaLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the lbf load balancer"
+      },
+      "defaultValue": "10.200.21.10"
     }
   },
   "variables": {
@@ -469,6 +483,26 @@
               "privateIPAddress": "[parameters('lbfDtaLoadBalancerIp')]"
             },
             "name": "lbfDtaLoadBalancerFrontend"
+          },
+          {
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbbSubnetName'))]"
+              },
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('lbbLoadBalancerIp')]"
+            },
+            "name": "lbbLoadBalancerFrontend"
+          },
+          {
+            "properties": {
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbbDtaSubnetName'))]"
+              },
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[parameters('lbbDtaLoadBalancerIp')]"
+            },
+            "name": "lbbDtaLoadBalancerFrontend"
           }
         ],
         "backendAddressPools": [
@@ -480,6 +514,12 @@
           },
           {
             "name": "f5LbfDtaBackendPool"
+          },
+          {
+            "name": "f5LbbBackendPool"
+          },
+          {
+            "name": "f5LbbDtaBackendPool"
           }
         ],
         "loadBalancingRules": [
@@ -536,6 +576,42 @@
               "idleTimeoutInMinutes": 15
             },
             "Name": "lbfDtaLbrule"
+          },
+          {
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/frontendIpConfigurations/lbbLoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/backendAddressPools/f5LbbBackendPool')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/probes/lbprobe')]"
+              },
+              "protocol": "All",
+              "frontendPort": 0,
+              "backendPort": 0,
+              "idleTimeoutInMinutes": 15
+            },
+            "Name": "lbbLbrule"
+          },
+          {
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/frontendIpConfigurations/lbbDtaLoadBalancerFrontend')]"
+              },
+              "backendAddressPool": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/backendAddressPools/f5LbbDtaBackendPool')]"
+              },
+              "probe": {
+                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('backEndLoadBalancerName')), '/probes/lbprobe')]"
+              },
+              "protocol": "All",
+              "frontendPort": 0,
+              "backendPort": 0,
+              "idleTimeoutInMinutes": 15
+            },
+            "Name": "lbbDtaLbrule"
           }
         ],
         "probes": [

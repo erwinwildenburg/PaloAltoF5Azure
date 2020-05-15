@@ -364,11 +364,25 @@
         "description": "The ip address of the lbf interface of the first F5."
       }
     },
+    "f5Host1NetworkInterface1Ip-selfIP": {
+      "type": "string",
+      "defaultValue": "10.200.18.8",
+      "metadata": {
+        "description": "The self ip address of the lbf interface of the first F5."
+      }  
+    },
     "f5Host1NetworkInterface2Ip": {
       "type": "string",
       "defaultValue": "10.200.19.6",
       "metadata": {
         "description": "The ip address of the lbb interface of the first F5."
+      }
+    },
+    "f5Host1NetworkInterface2Ip-selfIP": {
+      "type": "string",
+      "defaultValue": "10.200.19.8",
+      "metadata": {
+        "description": "The self ip address of the lbb interface of the first F5."
       }
     },
     "f5Host1NetworkInterface3Ip": {
@@ -378,11 +392,25 @@
         "description": "The ip address of the lbf dta interface of the first F5."
       }
     },
+    "f5Host1NetworkInterface3Ip-selfIP": {
+      "type": "string",
+      "defaultValue": "10.200.20.8",
+      "metadata": {
+        "description": "The self ip address of the lbf dta interface of the first F5."
+      }
+    },
     "f5Host1NetworkInterface4Ip": {
       "type": "string",
       "defaultValue": "10.200.21.6",
       "metadata": {
         "description": "The ip address of the lbb dta interface of the first F5."
+      }
+    },
+    "f5Host1NetworkInterface4Ip-selfIP": {
+      "type": "string",
+      "defaultValue": "10.200.21.8",
+      "metadata": {
+        "description": "The self ip address of the lbb dta interface of the first F5."
       }
     },
     "f5Host2NetworkInterface0Ip": {
@@ -399,11 +427,25 @@
         "description": "The ip address of the lbf interface of the second F5."
       }
     },
+    "f5Host2NetworkInterface1Ip-selfIP": {
+      "type": "string",
+      "defaultValue": "10.200.18.9",
+      "metadata": {
+        "description": "The self ip address of the lbf interface of the second F5."
+      }
+    },
     "f5Host2NetworkInterface2Ip": {
       "type": "string",
       "defaultValue": "10.200.19.7",
       "metadata": {
         "description": "The ip address of the lbb interface of the second F5."
+      }
+    },
+    "f5Host2NetworkInterface2Ip-selfIP": {
+      "type": "string",
+      "defaultValue": "10.200.19.9",
+      "metadata": {
+        "description": "The self ip address of the lbb interface of the second F5."
       }
     },
     "f5Host2NetworkInterface3Ip": {
@@ -413,9 +455,23 @@
         "description": "The ip address of the lbf dta interface of the second F5."
       }
     },
+    "f5Host2NetworkInterface3Ip-selfIP": {
+      "type": "string",
+      "defaultValue": "10.200.20.9",
+      "metadata": {
+        "description": "The ip address of the lbf dta interface of the second F5."
+      }
+    },
     "f5Host2NetworkInterface4Ip": {
       "type": "string",
       "defaultValue": "10.200.21.7",
+      "metadata": {
+        "description": "The ip address of the lbb dta interface of the second F5."
+      }
+    },
+    "f5Host2NetworkInterface4Ip-selfIP": {
+      "type": "string",
+      "defaultValue": "10.200.21.9",
       "metadata": {
         "description": "The ip address of the lbb dta interface of the second F5."
       }
@@ -489,6 +545,20 @@
         "description": "The ip address of the lbf dta interface of the first Palo Alto."
       },
       "defaultValue": "10.200.20.5"
+    },
+    "lbbLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the lbf load balancer"
+      },
+      "defaultValue": "10.200.19.10"
+    },
+    "lbbDtaLoadBalancerIp": {
+      "type": "string",
+      "metadata": {
+        "description": "The ip of the lbf load balancer"
+      },
+      "defaultValue": "10.200.21.10"
     }
   },
   "variables": {
@@ -589,6 +659,12 @@
           },
           "lbfDtaLoadBalancerIp": {
             "value": "[parameters('lbfDtaLoadBalancerIp')]"
+          },
+          "lbbLoadBalancerIp": {
+            "value": "[parameters('lbbLoadBalancerIp')]"
+          },
+          "lbbDtaLoadBalancerIp": {
+            "value": "[parameters('lbbDtaLoadBalancerIp')]"
           }
         }
       }
@@ -766,14 +842,26 @@
           "Host1NetworkInterface1Ip": {
             "value": "[parameters('f5Host1NetworkInterface1Ip')]"
           },
+          "Host1NetworkInterface1Ip-selfIP": {
+            "value": "[parameters('f5Host1NetworkInterface1Ip-selfIP')]"
+          },
           "Host1NetworkInterface2Ip": {
             "value": "[parameters('f5Host1NetworkInterface2Ip')]"
+          },
+          "Host1NetworkInterface2Ip-selfIP": {
+            "value": "[parameters('f5Host1NetworkInterface2Ip-selfIP')]"
           },
           "Host1NetworkInterface3Ip": {
             "value": "[parameters('f5Host1NetworkInterface3Ip')]"
           },
+          "Host1NetworkInterface3Ip-selfIP": {
+            "value": "[parameters('f5Host1NetworkInterface3Ip-selfIP')]"
+          },
           "Host1NetworkInterface4Ip": {
             "value": "[parameters('f5Host1NetworkInterface4Ip')]"
+          },
+          "Host1NetworkInterface4Ip-selfIP": {
+            "value": "[parameters('f5Host1NetworkInterface4Ip-selfIP')]"
           },
           "Host2NetworkInterface0Ip": {
             "value": "[parameters('f5Host2NetworkInterface0Ip')]"
@@ -781,14 +869,26 @@
           "Host2NetworkInterface1Ip": {
             "value": "[parameters('f5Host2NetworkInterface1Ip')]"
           },
+          "Host2NetworkInterface1Ip-selfIP": {
+            "value": "[parameters('f5Host2NetworkInterface1Ip-selfIP')]"
+          },
           "Host2NetworkInterface2Ip": {
             "value": "[parameters('f5Host2NetworkInterface2Ip')]"
+          },
+          "Host2NetworkInterface2Ip-selfIP": {
+            "value": "[parameters('f5Host2NetworkInterface2Ip-selfIP')]"
           },
           "Host2NetworkInterface3Ip": {
             "value": "[parameters('f5Host2NetworkInterface3Ip')]"
           },
+          "Host2NetworkInterface3Ip-selfIP": {
+            "value": "[parameters('f5Host2NetworkInterface3Ip-selfIP')]"
+          },
           "Host2NetworkInterface4Ip": {
             "value": "[parameters('f5Host2NetworkInterface4Ip')]"
+          },
+          "Host2NetworkInterface4Ip-selfIP": {
+            "value": "[parameters('f5Host2NetworkInterface4Ip-selfIP')]"
           },
           "externalAccessIps": {
             "value": "[parameters('externalAccessIps')]"
