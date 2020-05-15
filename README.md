@@ -23,3 +23,6 @@ This template is meant to let you do customized deployments of VM-Series instead
 
 - CLI: `azure vm show  -g YourResourceGroupName  -n YourDeploymentLabel`
 - Azure Portal: Your Resource Group > Deployment or Alert Logs
+
+## Notes
+When using an existing vnet you have to assign the UDR's to the subnets manually.
