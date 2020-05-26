@@ -454,7 +454,7 @@
           {
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubDMZSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubDMZSubnetName'))]"
               },
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('backEndLoadBalancerIp')]"
@@ -464,7 +464,7 @@
           {
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbfSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbfSubnetName'))]"
               },
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('lbfLoadBalancerIp')]"
@@ -474,7 +474,7 @@
           {
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbfDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbfDtaSubnetName'))]"
               },
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('lbfDtaLoadBalancerIp')]"
@@ -484,7 +484,7 @@
           {
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbbSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbbSubnetName'))]"
               },
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('lbbLoadBalancerIp')]"
@@ -494,7 +494,7 @@
           {
             "properties": {
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbbDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('hubVirtualNetworkName'), parameters('hubLbbDtaSubnetName'))]"
               },
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('lbbDtaLoadBalancerIp')]"

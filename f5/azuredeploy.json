@@ -387,7 +387,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface0Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('mgmtSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('mgmtSubnetName'))]"
               },
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('f51IpName'))]"
@@ -418,7 +418,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface0Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('mgmtSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('mgmtSubnetName'))]"
               },
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('f52IpName'))]"
@@ -443,7 +443,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface1Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
               }
             }
           },
@@ -454,7 +454,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface1Ip-selfIP')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
@@ -481,7 +481,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface1Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
               }
             }
           },
@@ -492,7 +492,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface1Ip-selfIP')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfSubnetName'))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
@@ -519,7 +519,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface2Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
               }
             }
           },
@@ -530,7 +530,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface2Ip-selfIP')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
@@ -557,7 +557,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface2Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
               }
             }
           },
@@ -568,7 +568,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface2Ip-selfIP')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbSubnetName'))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
@@ -595,7 +595,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface3Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
               }
             }
           },
@@ -606,7 +606,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface3Ip-selfIP')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
@@ -633,7 +633,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface3Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
               }
             }
           },
@@ -644,7 +644,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface3Ip-selfIP')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbfDtaSubnetName'))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
@@ -671,7 +671,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface4Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
               }
             }
           },
@@ -682,7 +682,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host1NetworkInterface4Ip-selfIP')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
@@ -709,7 +709,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface4Ip')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
               }
             }
           },
@@ -720,7 +720,7 @@
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[parameters('Host2NetworkInterface4Ip-selfIP')]",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
+                "id": "[resourceId('NetworkServices-P-WE', 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('LbbDtaSubnetName'))]"
               },
               "loadBalancerBackendAddressPools": [
                 {
