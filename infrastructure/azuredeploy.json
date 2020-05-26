@@ -449,9 +449,6 @@
       "sku": {
         "name": "Standard"
       },
-      "dependsOn": [
-        "[parameters('hubVirtualNetworkName')]"
-      ],
       "properties": {
         "frontendIPConfigurations": [
           {
