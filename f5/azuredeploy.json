@@ -32,37 +32,37 @@
     "mgmtSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-MGT Subnet Name"
+        "description": "AZW-MGT Subnet Name"
       },
-      "defaultValue": "AWZ-MGT"
+      "defaultValue": "AZW-MGT"
     },
     "lbfSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBF Subnet Name"
+        "description": "AZW-LBF Subnet Name"
       },
-      "defaultValue": "AWZ-LBF"
+      "defaultValue": "AZW-LBF"
     },
     "lbfDtaSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBF-DTA Subnet Name"
+        "description": "AZW-LBF-DTA Subnet Name"
       },
-      "defaultValue": "AWZ-LBF-DTA"
+      "defaultValue": "AZW-LBF-DTA"
     },
     "lbbSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBB Subnet Name"
+        "description": "AZW-LBB Subnet Name"
       },
-      "defaultValue": "AWZ-LBB"
+      "defaultValue": "AZW-LBB"
     },
     "lbbDtaSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBB-DTA Subnet Name"
+        "description": "AZW-LBB-DTA Subnet Name"
       },
-      "defaultValue": "AWZ-LBB-DTA"
+      "defaultValue": "AZW-LBB-DTA"
     },
     "LoadBalancerName": {
       "type": "string",
@@ -338,7 +338,7 @@
           {
             "name": "HTTPS",
             "properties": {
-              "description": "Allows Telindus access to HTTPS interface.",
+              "description": "Allows access to HTTPS interface.",
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "443",
@@ -352,7 +352,7 @@
           {
             "name": "SSH",
             "properties": {
-              "description": "Allows Telindus access to SSH interface.",
+              "description": "Allows access to SSH interface.",
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "22",

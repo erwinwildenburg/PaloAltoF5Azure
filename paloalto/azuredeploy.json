@@ -34,28 +34,28 @@
       "metadata": {
         "description": "Outside Subnet Name"
       },
-      "defaultValue": "AWZ-OUTSIDE"
+      "defaultValue": "AZW-OUTSIDE"
     },
     "DMZSubnetName": {
       "type": "string",
       "metadata": {
         "description": "DMZ Subnet Name"
       },
-      "defaultValue": "AWZ-DMZ"
+      "defaultValue": "AZW-DMZ"
     },
     "lbfSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBF Subnet Name"
+        "description": "AZW-LBF Subnet Name"
       },
-      "defaultValue": "AWZ-LBF"
+      "defaultValue": "AZW-LBF"
     },
     "lbfDtaSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBF-DTA Subnet Name"
+        "description": "AZW-LBF-DTA Subnet Name"
       },
-      "defaultValue": "AWZ-LBF-DTA"
+      "defaultValue": "AZW-LBF-DTA"
     },
     "HostVirtualMachine1Name": {
       "type": "string",
@@ -139,9 +139,9 @@
     "mgmtSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-MGMT Subnet Name"
+        "description": "AZW-MGMT Subnet Name"
       },
-      "defaultValue": "AWZ-MGT"
+      "defaultValue": "AZW-MGT"
     },
     "pa1IpName": {
       "type": "string",
@@ -288,7 +288,7 @@
           {
             "name": "HTTPS",
             "properties": {
-              "description": "Allows Telindus access to HTTPS interface.",
+              "description": "Allows access to HTTPS interface.",
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "443",
@@ -302,7 +302,7 @@
           {
             "name": "SSH",
             "properties": {
-              "description": "Allows Telindus access to SSH interface.",
+              "description": "Allows access to SSH interface.",
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "22",

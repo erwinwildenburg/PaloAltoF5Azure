@@ -39,7 +39,7 @@
       "metadata": {
         "description": "Outside Subnet Name"
       },
-      "defaultValue": "AWZ-OUTSIDE"
+      "defaultValue": "AZW-OUTSIDE"
     },
     "hubOutsideSubnetPrefix": {
       "type": "string",
@@ -53,7 +53,7 @@
       "metadata": {
         "description": "DMZ Subnet Name"
       },
-      "defaultValue": "AWZ-DMZ"
+      "defaultValue": "AZW-DMZ"
     },
     "hubDMZSubnetPrefix": {
       "type": "string",
@@ -65,70 +65,70 @@
     "hubLbfSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBF Subnet Name"
+        "description": "AZW-LBF Subnet Name"
       },
-      "defaultValue": "AWZ-LBF"
+      "defaultValue": "AZW-LBF"
     },
     "hubLbfSubnetPrefix": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBF Subnet Address Space"
+        "description": "AZW-LBF Subnet Address Space"
       },
       "defaultValue": "10.200.18.0/24"
     },
     "hubLbfDtaSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBF-DTA Subnet Name"
+        "description": "AZW-LBF-DTA Subnet Name"
       },
-      "defaultValue": "AWZ-LBF-DTA"
+      "defaultValue": "AZW-LBF-DTA"
     },
     "hubLbfDtaSubnetPrefix": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBF-DTA Subnet Address Space"
+        "description": "AZW-LBF-DTA Subnet Address Space"
       },
       "defaultValue": "10.200.20.0/24"
     },
     "hubLbbSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBB Subnet Name"
+        "description": "AZW-LBB Subnet Name"
       },
-      "defaultValue": "AWZ-LBB"
+      "defaultValue": "AZW-LBB"
     },
     "hubLbbSubnetPrefix": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBB Subnet Address Space"
+        "description": "AZW-LBB Subnet Address Space"
       },
       "defaultValue": "10.200.19.0/24"
     },
     "hubLbbDtaSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBB-DTA Subnet Name"
+        "description": "AZW-LBB-DTA Subnet Name"
       },
-      "defaultValue": "AWZ-LBB-DTA"
+      "defaultValue": "AZW-LBB-DTA"
     },
     "hubLbbDtaSubnetPrefix": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-LBB-DTA Subnet Address Space"
+        "description": "AZW-LBB-DTA Subnet Address Space"
       },
       "defaultValue": "10.200.21.0/24"
     },
     "hubMgmtSubnetName": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-MGMT Subnet Name"
+        "description": "AZW-MGMT Subnet Name"
       },
-      "defaultValue": "AWZ-MGT"
+      "defaultValue": "AZW-MGT"
     },
     "hubMgmtSubnetPrefix": {
       "type": "string",
       "metadata": {
-        "description": "AWZ-MGMT Subnet Address Space"
+        "description": "AZW-MGMT Subnet Address Space"
       },
       "defaultValue": "10.200.1.0/24"
     },
